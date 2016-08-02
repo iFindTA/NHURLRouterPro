@@ -101,6 +101,7 @@
 		6059AE381D509C7300D852FA /* NHURLRouterPro */ = {
 			isa = PBXGroup;
 			children = (
+				6059AE6C1D509CF000D852FA /* URLSchemeRouter */,
 				6059AE3C1D509C7300D852FA /* AppDelegate.h */,
 				6059AE3D1D509C7300D852FA /* AppDelegate.m */,
 				6059AE3F1D509C7300D852FA /* ViewController.h */,
@@ -138,6 +139,13 @@
 				6059AE601D509C7400D852FA /* Info.plist */,
 			);
 			path = NHURLRouterProUITests;
+			sourceTree = "<group>";
+		};
+		6059AE6C1D509CF000D852FA /* URLSchemeRouter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = URLSchemeRouter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
