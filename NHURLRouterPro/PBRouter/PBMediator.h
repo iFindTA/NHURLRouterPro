@@ -18,6 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PBMediator : NSObject
 
 /**
+ *  @brief global config for mediator
+ *
+ *  @param scheme the safely scheme to trust
+ */
++ (void)setupForScheme:(NSString *)scheme;
+
+/**
  *  @brief static class method for instance
  *
  *  @return the instance

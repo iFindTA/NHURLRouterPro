@@ -9,10 +9,11 @@
 #import "PBMediator.h"
 #import <objc/message.h>
 
-static NSString * const PBScheme        =   @"balabala";
 NSString * const PBQuerySelector        =   @"canOpenUrl:";
 
 @interface PBMediator ()
+
+@property (nonatomic, copy) NSString *safeScheme;
 
 @end
 
@@ -20,10 +21,22 @@ static PBMediator * instance = nil;
 
 @implementation PBMediator
 
++ (void)setupForScheme:(NSString *)scheme {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (instance == nil) {
+            instance = [[PBMediator alloc] init];
+            instance.safeScheme = scheme;
+        }
+    });
+}
+
 + (PBMediator *)shared {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[PBMediator alloc] init];
+        if (instance == nil) {
+            instance = [[PBMediator alloc] init];
+        }
     });
     return instance;
 }
@@ -62,7 +75,7 @@ static PBMediator * instance = nil;
 }
 
 - (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url {
-    if (![url.scheme isEqualToString:PBScheme]) {
+    if (self.safeScheme.length && ![url.scheme isEqualToString:self.safeScheme]) {
         return false;
     }
     //询问是否允许提供服务
