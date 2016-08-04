@@ -1,6 +1,19 @@
 # NHURLRouterPro
 #### iOS application各个业务组件的相互调用、引用的解耦问题，使用到了中间人＋URL Router的方式
 #### Usage:(processing->Build Setting->Enable Strict Checking of objc_msgSend Calls == False)!!!
+
+##### 使用前安全设置Scheme
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    //for safe check to setup scheme
+    [PBMediator setupForScheme:@"balabala"];
+    
+    ...
+    return YES;
+}
+```
+
 ##### 应用远程调用
 ```Objective-C
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
@@ -17,7 +30,7 @@
 ##### 应用内部调用(两种方式：初始化字典传值＋分类实现)
 1－初始化字典传值方式
 ```Objective-C
-NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com";
+	NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com";
     UIViewController *ctr = [[PBMediator shared] nativeCallWithURL:[NSURL URLWithString:url]];
     [self.navigationController pushViewController:ctr animated:true];
 ```
