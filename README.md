@@ -34,12 +34,16 @@
 ##### 应用内部调用(两种方式：初始化字典传值＋分类实现)
 1－初始化字典传值方式
 ```Objective-C
-	NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com";
+- (void)callNativeWebBrowserByURL {
+    
+    NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com";
     UIViewController *ctr = [[PBMediator shared] nativeCallWithURL:[NSURL URLWithString:url]];
     [self.navigationController pushViewController:ctr animated:true];
+    
+}
 ```
 2－分类实现方式
-```
+```Objective-C
 - (void)callNativeWebBrowserByCategory {
     
     UIViewController *ctr = [[PBMediator shared] wb_calledByTitle:@"baidu" withUrl:@"http://github.com/iFindTA/"];
