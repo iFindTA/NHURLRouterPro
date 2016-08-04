@@ -62,4 +62,4 @@ NS_ASSUME_NONNULL_END
 
 @end
 
-extern NSString * const PBQuerySelector;
+extern NSString * _Nonnull const PBQuerySelector;
