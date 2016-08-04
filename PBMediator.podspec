@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/iFindTA/NHURLRouterPro.git", :tag => s.version.to_s }
   s.source_files  = "NHURLRouterPro/PBRouter/**/*"
-  s.public_header_files = "NHURLRouterPro/PBRouter/*.h", "NHURLRouterPro/PBRouter/categories/*.h"
+  s.public_header_files = "NHURLRouterPro/PBRouter/**/*.h"
 
   s.framework  = "UIKit","Foundation"
   # s.frameworks = "SomeFramework", "AnotherFramework"

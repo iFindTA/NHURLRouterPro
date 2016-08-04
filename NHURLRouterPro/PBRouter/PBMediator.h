@@ -55,7 +55,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UIViewController *)nativeCallWithURL:(NSURL *)url;
 
+/**
+ *  @brief wether can open url
+ *
+ *  @param aTarget the dest target to be called
+ *  @param url     the info url
+ *
+ *  @return result
+ */
 - (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url;
+
+/**
+ *  @brief generate an error page
+ *
+ *  @return the page
+ */
 - (PBNotFounder *)generateNotFounder;
 
 NS_ASSUME_NONNULL_END
