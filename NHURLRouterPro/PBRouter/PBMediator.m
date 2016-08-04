@@ -62,6 +62,9 @@ static PBMediator * instance = nil;
 }
 
 - (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url {
+    if (![url.scheme isEqualToString:PBScheme]) {
+        return false;
+    }
     //询问是否允许提供服务
     SEL selector = NSSelectorFromString(PBQuerySelector);
     Class aClass = NSClassFromString(aTarget);
@@ -83,9 +86,7 @@ static PBMediator * instance = nil;
 }
 
 - (UIViewController *)nativeCallWithURL:(NSURL *)url {
-    if (![url.scheme isEqualToString:PBScheme]) {
-        return [self generateNotFounder];
-    }
+    
     NSString *aTarget = url.host;
     NSString *aSelector = url.path;
     aSelector = [aSelector stringByReplacingOccurrencesOfString:@"/" withString:@""];

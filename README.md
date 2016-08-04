@@ -1,6 +1,6 @@
 # NHURLRouterPro
 #### iOS application各个业务组件的相互调用、引用的解耦问题，使用到了中间人＋URL Router的方式
-
+#### Usage:(processing->Build Setting->Enable Strict Checking of objc_msgSend Calls == False)!!!
 ##### 应用远程调用
 ```Objective-C
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
