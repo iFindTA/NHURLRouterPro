@@ -3,7 +3,7 @@
 #### Usage:(processing->Build Setting->Enable Strict Checking of objc_msgSend Calls == False)!!!
 
 ##### 使用前安全设置Scheme
-```
+```Objective-C
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     //for safe check to setup scheme
