@@ -7,8 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "PBMediator.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong) UINavigationController *rootNaviCtr;
 
 @end
 
@@ -17,6 +21,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] initWithFrame:bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    ViewController *Ctr = [[ViewController alloc] init];
+    UINavigationController *naviCtr = [[UINavigationController alloc] initWithRootViewController:Ctr];
+    self.window.rootViewController = naviCtr;
+    self.rootNaviCtr = naviCtr;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -40,6 +53,17 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+    //balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com
+    NSLog(@"url:%@---opt:%@",url,options);
+    if ([url.scheme isEqualToString:@"balabala"]) {
+        UIViewController *ctr = [[PBMediator shared] remoteCallWithURL:url];
+        [self.rootNaviCtr pushViewController:ctr animated:true];
+        return true;
+    }
+    return false;
 }
 
 @end
