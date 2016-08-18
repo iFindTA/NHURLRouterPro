@@ -9,7 +9,8 @@
 #import "PBMediator.h"
 #import <objc/message.h>
 
-NSString * const PBQuerySelector        =   @"canOpenUrl:";
+NSString * const PBQueryRemoteSelector        =   @"canOpenedByRemoteUrl:";
+NSString * const PBQueryNativeSelector        =   @"canOpenedByNativeUrl:";
 
 @interface PBMediator ()
 
@@ -41,18 +42,6 @@ static PBMediator * instance = nil;
     return instance;
 }
 
-/**
- *  eg. url=[Scheme]://[target]/[selector]?[params].
- */
-- (UIViewController *)remoteCallWithURL:(NSURL *)url {
-    //TODO:这里可以加入一下安全的机制 譬如在Appdelegate里验证sourceApplication的合法性
-    return [self nativeCallWithURL:url];
-}
-
-- (UIViewController *)nativeCallWithURLString:(NSString *)urlString {
-    return [self nativeCallWithURL:[NSURL URLWithString:urlString]];
-}
-
 //parser url's query as a dictionary
 - (NSDictionary *)parserQueryString:(nullable NSString *)string {
     if (!string) {
@@ -74,12 +63,21 @@ static PBMediator * instance = nil;
     return [aDict copy];
 }
 
-- (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url {
+#pragma mark -- Query the target wether can be opened!
+
+- (BOOL)canOpened:(NSString *)aTarget byRemoteUrl:(NSURL *)url {
+    return [self canOpened:aTarget byUrl:url isRemmote:true];
+}
+
+- (BOOL)canOpened:(NSString *)aTarget byNativeUrl:(NSURL *)url {
+    return [self canOpened:aTarget byUrl:url isRemmote:false];
+}
+- (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url isRemmote:(BOOL)remote {
     if (self.safeScheme.length && ![url.scheme isEqualToString:self.safeScheme]) {
         return false;
     }
     //询问是否允许提供服务
-    SEL selector = NSSelectorFromString(PBQuerySelector);
+    SEL selector = NSSelectorFromString(remote?PBQueryRemoteSelector:PBQueryNativeSelector);
     Class aClass = NSClassFromString(aTarget);
     BOOL wetherCan = false;
     if ([aClass instancesRespondToSelector:selector]) {
@@ -98,21 +96,41 @@ static PBMediator * instance = nil;
     return notfounder;
 }
 
-- (UIViewController *)nativeCallWithURL:(NSURL *)url {
-    
-    NSString *aTarget = url.host;
+/**
+ *  eg. url=[Scheme]://[target]/[selector]?[params].
+ */
+- (UIViewController *)remoteCallWithURL:(NSURL *)url {
+    //TODO:这里可以加入一下安全的机制 譬如在Appdelegate里验证sourceApplication的合法性
+    NSString *aTarget = [url host];
+    BOOL canOpend = [self canOpened:aTarget byRemoteUrl:url];
+    if (!canOpend) {
+        return [self generateNotFounder];
+    }
     NSString *aSelector = url.path;
     aSelector = [aSelector stringByReplacingOccurrencesOfString:@"/" withString:@""];
     NSString *aParams = url.query;
     NSDictionary *params = [self parserQueryString:aParams];
     //return [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
-    //询问是否允许提供服务
-    BOOL wetherCan = [self canOpened:aTarget byUrl:url];
-    UIViewController *tmpCtr = nil;
-    if (wetherCan) {
-        tmpCtr = [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    UIViewController *tmpCtr = [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    
+    return (tmpCtr!=nil)?tmpCtr:[self generateNotFounder];
+}
+
+- (UIViewController *)nativeCallWithURL:(NSURL *)url {
+    
+    NSString *aTarget = [url host];
+    BOOL canOpend = [self canOpened:aTarget byNativeUrl:url];
+    if (!canOpend) {
+        return [self generateNotFounder];
     }
-    return wetherCan?tmpCtr:[self generateNotFounder];
+    NSString *aSelector = url.path;
+    aSelector = [aSelector stringByReplacingOccurrencesOfString:@"/" withString:@""];
+    NSString *aParams = url.query;
+    NSDictionary *params = [self parserQueryString:aParams];
+    //return [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    UIViewController *tmpCtr = [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    
+    return (tmpCtr!=nil)?tmpCtr:[self generateNotFounder];
 }
 
 - (UIViewController *)nativeCallTarget:(NSString *)target forSelector:(NSString *)selector withParams:(NSDictionary *)params {

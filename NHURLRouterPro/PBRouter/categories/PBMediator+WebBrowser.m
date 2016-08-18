@@ -17,7 +17,7 @@
     NSString *aClass = @"NHWebBrowser";
     NSString *aInit = @"initWithUrl:";
     NSError *error = nil;
-    BOOL wetherCan = [self canOpened:aClass byUrl:[NSURL URLWithString:url]];
+    BOOL wetherCan = [self canOpened:aClass byNativeUrl:[NSURL URLWithString:url]];
     if (wetherCan) {
         id aDester = [aClass pb_generateInstanceByInitMethod:aInit withError:&error,url];
         if (!error && aDester != nil) {

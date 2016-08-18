@@ -70,7 +70,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return result
  */
-- (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url;
+- (BOOL)canOpened:(NSString *)aTarget byRemoteUrl:(NSURL *)url;
+- (BOOL)canOpened:(NSString *)aTarget byNativeUrl:(NSURL *)url;
 
 /**
  *  @brief generate an error page
@@ -82,5 +83,3 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 @end
-
-extern NSString * _Nonnull const PBQuerySelector;
