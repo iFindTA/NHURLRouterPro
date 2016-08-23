@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (PBRunner)
 
-- (id)pb_generateInstanceByMethod:(NSString *)selString withError:(NSError * __autoreleasing *)error,...;
+- (id)pb_instanceCallMethod:(NSString *)selString withError:(NSError * __autoreleasing *)error,...;
 
 @end
 

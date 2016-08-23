@@ -410,7 +410,7 @@ return returnValue;\
 
 @implementation NSObject (PBRunner)
 
-- (id)pb_generateInstanceByMethod:(NSString *)selString withError:(NSError * _Nullable __autoreleasing *)error, ... {
+- (id)pb_instanceCallMethod:(NSString *)selString withError:(NSError * _Nullable __autoreleasing *)error, ... {
     va_list argList;
     va_start(argList, error);
     SEL selector = NSSelectorFromString(selString);

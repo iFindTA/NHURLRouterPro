@@ -35,7 +35,7 @@
 }
 
 - (BOOL)canOpenedByNativeUrl:(NSURL *)url {
-    return false;
+    return true;
 }
 
 - (void)viewDidLoad {
