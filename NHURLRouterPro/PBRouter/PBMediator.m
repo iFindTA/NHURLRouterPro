@@ -14,7 +14,7 @@ NSString * const PBQueryNativeSelector        =   @"canOpenedByNativeUrl:";
 
 @interface PBMediator ()
 
-@property (nonatomic, copy) NSString *safeScheme;
+@property (nonatomic, strong) NSArray *trustSchemes;
 
 @end
 
@@ -22,12 +22,12 @@ static PBMediator * instance = nil;
 
 @implementation PBMediator
 
-+ (void)setupForScheme:(NSString *)scheme {
++ (void)setupForTrustSchemes:(NSArray *)schemes {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (instance == nil) {
             instance = [[PBMediator alloc] init];
-            instance.safeScheme = scheme;
+            instance.trustSchemes = [NSArray arrayWithArray:schemes];
         }
     });
 }
@@ -65,6 +65,32 @@ static PBMediator * instance = nil;
 
 #pragma mark -- Query the target wether can be opened!
 
+- (BOOL)wetherTrustScheme:(NSString *)scheme {
+    if (scheme.length==0) {
+        return false;
+    }
+    __block BOOL trust = false;
+    scheme = scheme.lowercaseString;
+    [self.trustSchemes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.lowercaseString isEqualToString:scheme]) {
+            trust = true;
+            *stop = true;
+        }
+    }];
+    return trust;
+}
+
+- (BOOL)shouldDisplayURL:(NSURL *)url {
+    
+    if (!url ||url.scheme.length == 0 || url.host.length==0 || url.path.length==0) {
+        return false;
+    }
+    if (![self wetherTrustScheme:url.scheme]) {
+        return false;
+    }
+    return true;
+}
+
 - (BOOL)canOpened:(NSString *)aTarget byRemoteUrl:(NSURL *)url {
     return [self canOpened:aTarget byUrl:url isRemmote:true];
 }
@@ -73,7 +99,7 @@ static PBMediator * instance = nil;
     return [self canOpened:aTarget byUrl:url isRemmote:false];
 }
 - (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url isRemmote:(BOOL)remote {
-    if (self.safeScheme.length && ![url.scheme isEqualToString:self.safeScheme]) {
+    if (![self wetherTrustScheme:url.scheme]) {
         return false;
     }
     //询问是否允许提供服务

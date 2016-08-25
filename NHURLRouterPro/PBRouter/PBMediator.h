@@ -20,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief global config for mediator
  *
- *  @param scheme the safely scheme to trust
+ *  @param schemes the safely schemes to trust
  */
-+ (void)setupForScheme:(NSString *)scheme;
++ (void)setupForTrustSchemes:(NSArray *)schemes;
 
 /**
  *  @brief static class method for instance
@@ -30,6 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return the instance
  */
 + (PBMediator *)shared;
+
+/**
+ *  @brief wether should show new page for url, such as just open app for url
+ *
+ *  @param url the url
+ *
+ *  @return result
+ */
+- (BOOL)shouldDisplayURL:(NSURL *)url;
 
 /**
  *  @brief called by remote's app or APNS

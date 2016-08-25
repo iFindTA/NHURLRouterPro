@@ -22,7 +22,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     //for safe check to setup scheme
-    [PBMediator setupForScheme:@"balabala"];
+    [PBMediator setupForTrustSchemes:@[@"balabala"]];
     
     CGRect bounds = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:bounds];
