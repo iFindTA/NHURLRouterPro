@@ -47,6 +47,7 @@ static PBMediator * instance = nil;
     if (!string) {
         return nil;
     }
+    string = [string stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     __block NSMutableDictionary *aDict = [NSMutableDictionary dictionary];
     NSArray *tmp = [string componentsSeparatedByString:@"&"];
     if (!tmp || tmp.count == 0) {

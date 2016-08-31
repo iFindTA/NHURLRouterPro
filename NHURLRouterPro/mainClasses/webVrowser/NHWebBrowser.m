@@ -30,6 +30,7 @@
     if (self) {
         NSString *url = [params objectForKey:@"url"];
         self.originUrl = [url copy];
+        self.title = [params objectForKey:@"theme"];
     }
     return self;
 }
