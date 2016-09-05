@@ -8,6 +8,12 @@
 
 #import "PBNotFounder.h"
 
+@interface PBNotFounder ()
+
+@property (nonatomic, assign) BOOL isModalPresented;
+
+@end
+
 @implementation PBNotFounder
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -35,6 +41,36 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (self.navigationController != nil) {
+        self.isModalPresented = self.navigationController.isBeingPresented;
+    }else{
+        self.isModalPresented = self.isBeingPresented;
+    }
+    [self fixedBackNavigationItem];
+}
+
+- (void)fixedBackNavigationItem {
+    UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barSpacer.width = -16;
+    NSString *title = self.isModalPresented?@"取消":@"返回";
+    CGRect bounds = CGRectMake(0, 0, 50, 31);
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = bounds;
+    btn.exclusiveTouch = true;
+    btn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn setTitle:title forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(backEvent) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backBarItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    self.navigationItem.leftBarButtonItems = @[barSpacer, backBarItem];
+}
+
+- (void)backEvent {
+    if (self.isModalPresented) {
+        [self dismissViewControllerAnimated:true completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:true];
+    }
 }
 
 @end
