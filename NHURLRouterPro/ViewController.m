@@ -52,7 +52,12 @@
 
 - (void)callNativeWebBrowserByCategory {
     
-    UIViewController *ctr = [[PBMediator shared] wb_calledByTitle:@"baidu" withUrl:@"http://github.com/iFindTA/"];
+    //UIViewController *ctr = [[PBMediator shared] wb_calledByTitle:@"baidu" withUrl:@"http://github.com/iFindTA/"];
+    //[self.navigationController pushViewController:ctr animated:true];
+    
+    NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:";
+    NSDictionary *aDict = [NSDictionary dictionaryWithObjectsAndKeys:@"http://github.com/iFindTA/",@"url",@"iFindTA",@"theme", nil];
+    UIViewController *ctr = [[PBMediator shared] nativeCallWithURL:[NSURL URLWithString:url] withParams:aDict];
     [self.navigationController pushViewController:ctr animated:true];
 }
 

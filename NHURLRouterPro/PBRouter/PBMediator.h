@@ -48,9 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  @attention:[target]:is a class's name for dest to call.
  *  @attention:[selector]:is a initialized method for the [target].
  *
- *  @attention!!!:the dest component's init mthod must support Dictionary params!!!
- *  such as:    'initWithParams:(NSDictionary * _Nullable)aDict'
- *  otherwith:  there should be implementationed by category!!!
+ *  @attention!!!:the dest component's init method must support Dictionary params!!!
+ *  such as:    'initWithParams:(NSDictionary * _Nullable)aDict' and 
+ *  it must be implemented by category when params contains non-basic type!!!
  *
  *  @return the component for destCall otherwise a notfound page.
  */
@@ -62,14 +62,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param url eg.[scheme]://[target]/[selector]?[params].
  *
  *  @attention!!!:the dest component's init mthod must support Dictionary params!!!
- *  such as:    'initWithParams:(NSDictionary * _Nullable)aDict'
- *  otherwith:  there should be implementationed by category!!!
+ *  such as:    'initWithParams:(NSDictionary * _Nullable)aDict' and
+ *  it must be implemented by category when params contains non-basic type!!!
  *
  *  @see    remoteCallWithURL:
  *
  *  @return the component for destCall otherwise a notfound page.
  */
 - (UIViewController *)nativeCallWithURL:(NSURL *)url;
+
+/**
+ @brief called by native,]
+
+ @param url eg.[scheme]://[target]/[selector],
+ @param aDict params
+ *
+ *  @attention!!!:the url must NOT contain params!!!, params contain in aDict!
+ *                  if should do this please use:
+ *                  nativeCallWithURL: instead!
+ *
+ @return the component for destCall otherwise a notfound page.
+ */
+- (UIViewController *)nativeCallWithURL:(NSURL *)url withParams:(NSDictionary * _Nonnull)aDict;
 
 /**
  *  @brief wether can open url

@@ -119,7 +119,11 @@ static PBMediator * instance = nil;
 }
 
 - (PBNotFounder *)generateNotFounder {
-    PBNotFounder *notfounder = [[PBNotFounder alloc] init];
+    static PBNotFounder *notfounder = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        notfounder = [[PBNotFounder alloc] init];
+    });
     return notfounder;
 }
 
@@ -156,6 +160,22 @@ static PBMediator * instance = nil;
     NSDictionary *params = [self parserQueryString:aParams];
     //return [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
     UIViewController *tmpCtr = [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    
+    return (tmpCtr!=nil)?tmpCtr:[self generateNotFounder];
+}
+
+- (UIViewController *)nativeCallWithURL:(NSURL *)url withParams:(NSDictionary * _Nonnull)aDict {
+    NSString *aTarget = [url host];
+    BOOL canOpend = [self canOpened:aTarget byNativeUrl:url];
+    if (!canOpend) {
+        return [self generateNotFounder];
+    }
+    NSString *aSelector = url.path;
+    aSelector = [aSelector stringByReplacingOccurrencesOfString:@"/" withString:@""];
+    //NSString *aParams = url.query;
+    //NSDictionary *params = [self parserQueryString:aParams];
+    //return [self nativeCallTarget:aTarget forSelector:aSelector withParams:params];
+    UIViewController *tmpCtr = [self nativeCallTarget:aTarget forSelector:aSelector withParams:aDict];
     
     return (tmpCtr!=nil)?tmpCtr:[self generateNotFounder];
 }
