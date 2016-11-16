@@ -53,14 +53,16 @@ static PBMediator * instance = nil;
     if (!tmp || tmp.count == 0) {
         tmp = [string componentsSeparatedByString:@"|"];
     }
-    [tmp enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSArray *keyValue = [obj componentsSeparatedByString:@"="];
+    NSEnumerator *enumerator = [tmp objectEnumerator];
+    NSString *key_value = nil;
+    while (key_value = [enumerator nextObject] ) {
+        NSArray *keyValue = [key_value componentsSeparatedByString:@"="];
         if (keyValue.count == 2) {
             [aDict setObject:keyValue[1] forKey:keyValue[0]];
         }else{
-            NSLog(@"%s-%@-parser error!",__func__,obj);
+            NSLog(@"%s-%@-parser error!",__func__,key_value);
         }
-    }];
+    }
     return [aDict copy];
 }
 
@@ -72,12 +74,15 @@ static PBMediator * instance = nil;
     }
     __block BOOL trust = false;
     scheme = scheme.lowercaseString;
-    [self.trustSchemes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj.lowercaseString isEqualToString:scheme]) {
+    
+    NSEnumerator *enumerator = [self.trustSchemes objectEnumerator];
+    NSString *tmp_scheme = nil;
+    while (tmp_scheme = [enumerator nextObject]) {
+        if ([tmp_scheme.lowercaseString isEqualToString:scheme]) {
             trust = true;
-            *stop = true;
+            break;
         }
-    }];
+    }
     return trust;
 }
 

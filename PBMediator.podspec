@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PBMediator"
-  s.version      = "0.1.1"
+  s.version      = "0.1.2"
   s.summary      = "PBMediator is an Objc Wrapper for components communication."
   s.homepage     = "https://github.com/iFindTA/NHURLRouterPro"
   s.description  = "Between components’s communication over url routes some like flask’s route mechanism that warpper by Objc, and for ios"
