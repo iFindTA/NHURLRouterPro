@@ -47,8 +47,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "-remoteCallWithURL:"
-            landmarkType = "5">
+            landmarkName = "-generateNotFounder"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -63,8 +63,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "-nativeCallWithURL:"
-            landmarkType = "5">
+            landmarkName = "-remoteCallWithURL:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -80,7 +80,7 @@
             startingLineNumber = "398"
             endingLineNumber = "398"
             landmarkName = "-pb_generateInstanceByInitMethod:withError:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -96,7 +96,7 @@
             startingLineNumber = "394"
             endingLineNumber = "394"
             landmarkName = "-pb_generateInstanceByInitMethod:withError:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -112,7 +112,7 @@
             startingLineNumber = "388"
             endingLineNumber = "388"
             landmarkName = "-pb_generateInstanceByInitMethod:withError:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -128,7 +128,7 @@
             startingLineNumber = "140"
             endingLineNumber = "140"
             landmarkName = "-remoteCallWithURL:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -144,7 +144,7 @@
             startingLineNumber = "418"
             endingLineNumber = "418"
             landmarkName = "-pb_instanceCallMethod:withError:"
-            landmarkType = "5">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -160,7 +160,7 @@
             startingLineNumber = "102"
             endingLineNumber = "102"
             landmarkName = "pb_targetBoxingArguments()"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -185,8 +185,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
             endingLineNumber = "122"
-            landmarkName = "-generateNotFounder"
-            landmarkType = "5">
+            landmarkName = "-canOpened:byUrl:isRemmote:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

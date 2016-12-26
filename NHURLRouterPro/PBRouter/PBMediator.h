@@ -32,6 +32,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (PBMediator *)shared;
 
 /**
+ set max cache size for memory
+
+ @param size :the size, default was 5M
+ */
++ (void)setupMaxCacheSize:(long long)size;
+
+/**
+ wether enable auto clean memory function
+
+ @param enable :wether on default was true
+ */
++ (void)autoCleanMemoryEnable:(BOOL)enable;
+
+/**
  *  @brief wether should show new page for url, such as just open app for url
  *
  *  @param url the url
@@ -102,6 +116,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return the page
  */
 - (PBNotFounder *)generateNotFounder;
+
+/**
+ clean the class caches that in memory
+ */
+- (void)cleanClassCaches;
 
 NS_ASSUME_NONNULL_END
 

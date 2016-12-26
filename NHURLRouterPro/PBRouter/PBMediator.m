@@ -9,12 +9,24 @@
 #import "PBMediator.h"
 #import <objc/message.h>
 
-NSString * const PBQueryRemoteSelector        =   @"canOpenedByRemoteUrl:";
-NSString * const PBQueryNativeSelector        =   @"canOpenedByNativeUrl:";
+NSString * const PBQueryRemoteSelector                      =   @"canOpenedByRemoteUrl:";
+NSString * const PBQueryNativeSelector                      =   @"canOpenedByNativeUrl:";
+
+//default max caches
+static long long PB_MEDIATOR_CACHE_SIZE                     =   5*1024*1024;
 
 @interface PBMediator ()
 
+/**
+ the schemes for trust
+ */
 @property (nonatomic, strong) NSArray *trustSchemes;
+
+/**
+ the class's instance caches
+ */
+@property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *,id>* classCaches;
+@property (nonatomic, assign) BOOL autoCleanCache;
 
 @end
 
@@ -40,6 +52,27 @@ static PBMediator * instance = nil;
         }
     });
     return instance;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.autoCleanCache = true;
+    }
+    return self;
+}
+
++ (void)setupMaxCacheSize:(long long)size {
+    PB_MEDIATOR_CACHE_SIZE = size;
+}
+
+#pragma mark -- getter
+
+- (NSMutableDictionary <NSString *, id>*)classCaches {
+    if (!_classCaches) {
+        _classCaches = [NSMutableDictionary dictionaryWithCapacity:0];
+    }
+    return _classCaches;
 }
 
 //parser url's query as a dictionary
@@ -105,18 +138,31 @@ static PBMediator * instance = nil;
     return [self canOpened:aTarget byUrl:url isRemmote:false];
 }
 - (BOOL)canOpened:(NSString *)aTarget byUrl:(NSURL *)url isRemmote:(BOOL)remote {
+    //wether trust the scheme
     if (![self wetherTrustScheme:url.scheme]) {
+        return false;
+    }
+    //wether indecate a target that non-none!
+    if (aTarget.length == 0) {
         return false;
     }
     //询问是否允许提供服务
     SEL selector = NSSelectorFromString(remote?PBQueryRemoteSelector:PBQueryNativeSelector);
     Class aClass = NSClassFromString(aTarget);
     BOOL wetherCan = false;
-    if ([aClass instancesRespondToSelector:selector]) {
+    if (aClass && [aClass instancesRespondToSelector:selector]) {
+        //query class instance var from cache first
+        id aInstance = [self.classCaches objectForKey:aTarget];
+        if (aInstance == nil) {
+            //create a new instance for the 'target' class
+            id aInstance = [[aClass alloc] init];
+            //cache the instance
+            [self.classCaches setObject:aInstance forKey:aTarget];
+            [self autoCleanCachesWhenUpdate];
+        }
         //objc_msgSend 64位的硬件上crash
         //        id ret = ((id(*)(id, SEL, id))objc_msgSend)(tmpCtr, selector, url);
         //        id ret = [tmpCtr performSelector:selector withObject:url];
-        id aInstance = [[aClass alloc] init];
         BOOL (*msgSend)(id, SEL, NSURL *) = (BOOL (*)(id, SEL, NSURL *))objc_msgSend;
         wetherCan = msgSend(aInstance, selector, url);
     }
@@ -130,6 +176,30 @@ static PBMediator * instance = nil;
         notfounder = [[PBNotFounder alloc] init];
     });
     return notfounder;
+}
+
+- (unsigned long)calculateCachesSize {
+    NSError *error = nil;
+    NSData * data = [NSPropertyListSerialization dataWithPropertyList:self.classCaches format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
+    if (error) {
+        NSLog(@"calculate caches size error: %@", error.localizedDescription);
+        return 0;
+    }
+    return (unsigned long)data.length;
+}
+
+- (void)autoCleanCachesWhenUpdate {
+    if (self.autoCleanCache) {
+        unsigned long size = [self calculateCachesSize];
+        if (size >= PB_MEDIATOR_CACHE_SIZE) {
+            [self cleanClassCaches];
+        }
+    }
+}
+
+- (void)cleanClassCaches {
+    [self.classCaches removeAllObjects];
+    _classCaches = nil;
 }
 
 /**
