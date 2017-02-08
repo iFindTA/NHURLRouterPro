@@ -39,13 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setupMaxCacheSize:(long long)size;
 
 /**
- wether enable auto clean memory function
-
- @param enable :wether on default was true
- */
-+ (void)autoCleanMemoryEnable:(BOOL)enable;
-
-/**
  *  @brief wether should show new page for url, such as just open app for url
  *
  *  @param url the url

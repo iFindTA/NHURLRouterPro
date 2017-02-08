@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "-generateNotFounder"
+            landmarkName = "-shouldDisplayURL:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "-remoteCallWithURL:"
+            landmarkName = "-canOpened:byUrl:isRemmote:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -127,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
             endingLineNumber = "140"
-            landmarkName = "-remoteCallWithURL:"
+            landmarkName = "-canOpened:byUrl:isRemmote:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,7 +185,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
             endingLineNumber = "122"
-            landmarkName = "-canOpened:byUrl:isRemmote:"
+            landmarkName = "-shouldDisplayURL:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

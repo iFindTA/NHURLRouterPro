@@ -14,7 +14,27 @@ NSString * const PBQueryNativeSelector                      =   @"canOpenedByNat
 
 //default max caches
 static long long PB_MEDIATOR_CACHE_SIZE                     =   5*1024*1024;
+#pragma mark ==PBCache Class ==
+@interface PBAutoPurgeCache : NSCache
+@end
 
+@implementation PBAutoPurgeCache
+
+- (nonnull instancetype)init {
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeAllObjects) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+}
+
+@end
+
+#pragma mark == PBMediator Class ==
 @interface PBMediator ()
 
 /**
@@ -25,8 +45,7 @@ static long long PB_MEDIATOR_CACHE_SIZE                     =   5*1024*1024;
 /**
  the class's instance caches
  */
-@property (nonatomic, readwrite, strong) NSMutableDictionary <NSString *,id>* classCaches;
-@property (nonatomic, assign) BOOL autoCleanCache;
+@property (nonatomic, readwrite, strong) NSCache <NSString *,id>* classCaches;
 
 @end
 
@@ -57,20 +76,21 @@ static PBMediator * instance = nil;
 - (id)init {
     self = [super init];
     if (self) {
-        self.autoCleanCache = true;
+        
     }
     return self;
 }
 
 + (void)setupMaxCacheSize:(long long)size {
-    PB_MEDIATOR_CACHE_SIZE = size;
+    [PBMediator shared].classCaches.totalCostLimit = size;
 }
 
 #pragma mark -- getter
 
-- (NSMutableDictionary <NSString *, id>*)classCaches {
+- (NSCache <NSString *, id>*)classCaches {
     if (!_classCaches) {
-        _classCaches = [NSMutableDictionary dictionaryWithCapacity:0];
+        _classCaches = [[PBAutoPurgeCache alloc] init];
+        _classCaches.totalCostLimit = PB_MEDIATOR_CACHE_SIZE;
     }
     return _classCaches;
 }
@@ -155,10 +175,9 @@ static PBMediator * instance = nil;
         id aInstance = [self.classCaches objectForKey:aTarget];
         if (aInstance == nil) {
             //create a new instance for the 'target' class
-            id aInstance = [[aClass alloc] init];
+            aInstance = [[aClass alloc] init];
             //cache the instance
             [self.classCaches setObject:aInstance forKey:aTarget];
-            [self autoCleanCachesWhenUpdate];
         }
         //objc_msgSend 64位的硬件上crash
         //        id ret = ((id(*)(id, SEL, id))objc_msgSend)(tmpCtr, selector, url);
@@ -176,25 +195,6 @@ static PBMediator * instance = nil;
         notfounder = [[PBNotFounder alloc] init];
     });
     return notfounder;
-}
-
-- (unsigned long)calculateCachesSize {
-    NSError *error = nil;
-    NSData * data = [NSPropertyListSerialization dataWithPropertyList:self.classCaches format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
-    if (error) {
-        NSLog(@"calculate caches size error: %@", error.localizedDescription);
-        return 0;
-    }
-    return (unsigned long)data.length;
-}
-
-- (void)autoCleanCachesWhenUpdate {
-    if (self.autoCleanCache) {
-        unsigned long size = [self calculateCachesSize];
-        if (size >= PB_MEDIATOR_CACHE_SIZE) {
-            [self cleanClassCaches];
-        }
-    }
 }
 
 - (void)cleanClassCaches {
