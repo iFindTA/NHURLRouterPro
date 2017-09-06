@@ -43,7 +43,7 @@
 
 - (void)callNativeWebBrowserByURL {
     
-    NSString *url = @"balabala://NHWebBrowser/initWithUrlParams:?url=http://baidu.com&theme=南湖";
+    NSString *url = @"balabala://NHWebBrowsere/initWithUrlParams:?url=http://baidu.com&theme=南湖";
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     UIViewController *ctr = [[PBMediator shared] nativeCallWithURL:[NSURL URLWithString:url]];
     [self.navigationController pushViewController:ctr animated:true];

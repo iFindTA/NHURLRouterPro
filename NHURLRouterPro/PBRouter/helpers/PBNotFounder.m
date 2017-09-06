@@ -27,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"Not Found!";
+    self.title = @"404!";
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.view.bounds];
     label.backgroundColor = [UIColor whiteColor];
@@ -35,7 +35,7 @@
     label.font = [UIFont systemFontOfSize:15];
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = @"抱歉，您访问的服务没有找到！";
+    label.text = @"awoo，您访问的服务貌似去火星了！";
     [self.view addSubview:label];
 }
 
@@ -46,7 +46,8 @@
     }else{
         self.isModalPresented = self.isBeingPresented;
     }
-    [self fixedBackNavigationItem];
+    //codes below due to can not back by swip
+    //[self fixedBackNavigationItem];
 }
 
 - (void)fixedBackNavigationItem {
